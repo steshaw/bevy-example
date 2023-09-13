@@ -27,9 +27,9 @@ fn hello_world() {
     println!("hello world!");
 }
 
-fn greet_people(query: Query<&Name, With<Person>>) {
+fn greet_people(time: Res<Time>, query: Query<&Name, With<Person>>) {
     for name in &query {
-        println!("hello {}!", name.0);
+        println!("hello name={} time={:?}!", name.0, time.delta());
     }
 }
 
