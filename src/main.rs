@@ -23,14 +23,10 @@ fn startup_people(mut commands: Commands) {
     commands.spawn((Person, Name("Zayna Nieves".to_string())));
 }
 
-fn hello_world() {
-    println!("hello world!");
-}
-
 fn greet_people(time: Res<Time>, mut timer: ResMut<GreetTimer>, query: Query<&Name, With<Person>>) {
     if timer.0.tick(time.delta()).just_finished() {
         for name in &query {
-            println!("hello name={} time={:?}!", name.0, time.delta());
+            println!("hello name={} time={:?}!", name.0, time.elapsed());
         }
     }
 }
@@ -42,9 +38,11 @@ pub struct OurPlugin;
 
 impl Plugin for OurPlugin {
     fn build(&self, app: &mut App) {
+        let timer = GreetTimer(Timer::from_seconds(2.0, TimerMode::Repeating));
         app
+            .insert_resource(timer)
             .add_systems(Startup, startup_people)
-            .add_systems(Update, (greet_people, hello_world))
+            .add_systems(Update, greet_people)
             .add_systems(Update, print_position_system);
     }
 }
