@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, window::PresentMode};
 
 #[derive(Component)]
 struct Position { x: f32, y: f32 }
@@ -50,7 +50,16 @@ impl Plugin for OurPlugin {
 
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins)
+        .add_plugins(DefaultPlugins.set(WindowPlugin {
+            primary_window: Some(Window {
+                title: "Invaders".to_string(),
+                resolution: (640., 480.).into(),
+                present_mode: PresentMode::AutoVsync,
+                ..default()
+            }),
+            ..default()
+        }))
         .add_plugins(OurPlugin)
         .run();
 }
+
