@@ -33,11 +33,21 @@ fn greet_people(query: Query<&Name, With<Person>>) {
     }
 }
 
+pub struct OurPlugin;
+
+impl Plugin for OurPlugin {
+    fn build(&self, app: &mut App) {
+        app
+            .add_systems(Startup, startup_people)
+            .add_systems(Update, (greet_people, hello_world))
+            .add_systems(Update, print_position_system);
+    }
+}
+
+
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_systems(Startup, startup_people)
-        .add_systems(Update, (greet_people, hello_world))
-        .add_systems(Update, print_position_system)
+        .add_plugins(OurPlugin)
         .run();
 }
